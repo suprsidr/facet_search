@@ -1,0 +1,22 @@
+{
+  "name": "Faceted_Search",
+  "productName": "HH.com Faceted Search Builder",
+  "main": "./index.html",
+  "description": "Build and save faceted search params to DB",
+  "repository": "https://github.com/suprsidr/api_updater.git",
+  "version": "0.0.7",
+  "window": {
+    "title": "HH.com Faceted Search Builder",
+    "icon": "./app.png",
+    "transparent": true,
+    "width": 1000,
+    "height": 665,
+    "frame": false,
+    "toolbar": false
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "ibm_db": "0.0.15",
+    "lodash": "^3.0.1"
+  }
+}

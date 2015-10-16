@@ -1,5 +1,5 @@
-# HH Product Data API Updater
-Update HH product data API that we host on DO
+# HH Faceted Search Builder
+Build and save Faceted Marketing URLs
 
 # Quick start
 The only development dependencies of this project is
@@ -7,8 +7,8 @@ The only development dependencies of this project is
 make sure you have them installed.
 Then type few commands known to every Node developer...
 ```
-git clone https://github.com/suprsidr/api_updater.git
-cd api_updater
+git clone https://github.com/suprsidr/facet_search.git
+cd facet_search
 npm install
 npm start
 ```

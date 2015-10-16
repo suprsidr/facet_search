@@ -46,13 +46,6 @@ You can create Windows installer only when running on Windows, the same is true 
 ## Special precautions for Windows
 As installer [NSIS](http://nsis.sourceforge.net/Main_Page) is used. You have to install it (version 3.0), and add NSIS folder to PATH in Environment Variables, so it is reachable to scripts in this project (path should look something like `C:/Program Files (x86)/NSIS`).
 
-## Hints:
-
-After initial run of step 2 (Insert in local DB) - future runs of this step will be much quicker if you create a unique index on ProdID
-
-```
-db.products.createIndex( { "ProdID": 1 }, { unique: true } )
-```
 
 # License
 

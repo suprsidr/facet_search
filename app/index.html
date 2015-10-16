@@ -46,19 +46,19 @@
       	<div class="small-4 columns">
       		<fieldset>
       			<legend>Store Id</legend>
-    				<input type="text" name="storeId" value="10151" disabled/>
+    				<input type="text" name="storeId" value="10151" />
       		</fieldset>
       	</div>
       	<div class="small-4 columns">
       		<fieldset>
       			<legend>Catalog Id</legend>
-    				<input type="text" name="catalogId" value="10051" disabled/>
+    				<input type="text" name="catalogId" value="10051" />
       		</fieldset>
       	</div>
       	<div class="small-4 columns">
           <fieldset>
             <legend>Lang Id</legend>
-            <input type="text" name="langId" value="-1" disabled/>
+            <input type="text" name="langId" value="-1" />
           </fieldset>
         </div>
       </div>
@@ -66,7 +66,7 @@
         <div class="small-4 columns">
           <fieldset>
             <legend>Search Term</legend>
-            <input type="text" name="searchTerm" value="" placeholder="Search Term"/>
+            <input type="text" name="searchTerm" placeholder="Search Term"/>
           </fieldset>
         </div>
         <div class="small-4 columns">
@@ -74,10 +74,10 @@
             <legend>Price Range</legend>
             <div class="row">
               <div class="small-6 columns">
-                <input type="number" name="minPrice" value="" placeholder="Min Price"/>
+                <input type="number" name="minPrice" placeholder="Min Price"/>
               </div>
               <div class="small-6 columns">
-                <input type="number" name="maxPrice" value="" placeholder="Max Price"/>
+                <input type="number" name="maxPrice" placeholder="Max Price"/>
               </div>
             </div>
           </fieldset>
@@ -173,7 +173,7 @@
                 <legend>SEO Url Param</legend>
                 <div class="row">
                   <div class="small-6 columns">
-                    <input type="text" name="seoUrlParam" value="" placeholder="SuperBlackFridaySpecial"/>
+                    <input type="text" name="seoUrlParam" placeholder="SuperBlackFridaySpecial"/>
                   </div>
                   <div class="small-6 columns">
                     <div class="row insert hidden">
@@ -221,7 +221,7 @@
           </div>
         </div>
         <div class="small-6 columns">
-          <fieldset style="min-height: 220px;">
+          <fieldset style="min-height: 220px;overflow-x: hidden;">
             <legend>Current Facets</legend>
             <ul class="current-facets"></ul>
           </fieldset>
@@ -235,6 +235,14 @@
           </fieldset>
         </div>
       </div>
+    </div>
+    <div class="toggler">
+      <fieldset class="switch tiny" tabindex="0">
+        <input id="stageprod" type="checkbox">
+        <label for="stageprod"></label>
+      </fieldset>
+      <span class="stage">Stage</span>
+      <span class="production">Production</span>
     </div>
     <script src="./js/jquery-2.1.1.min.js"></script>
     <script src="./js/spin.min.js"></script>

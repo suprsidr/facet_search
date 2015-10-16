@@ -111,6 +111,10 @@ ul.radio-group.page-size {
 }
 .current-facets {
   list-style: none;
+  margin-left: .5rem;
+}
+.current-facets li {
+  word-break: break-all;
 }
 .current-facets a {
   display: inline-block;
@@ -124,6 +128,10 @@ ul.radio-group.page-size {
 .hidden {
   display: none;
 }
+.not-visible {
+  position: absolute;
+  left: -110%;
+}
 .vtext {
   position: absolute;
   bottom: 0.25rem;
@@ -133,6 +141,41 @@ ul.radio-group.page-size {
   margin-bottom: 0;
   font-family: monospace, monospace;
   font-size: 0.8em; }
+  
+.toggler {
+  position: absolute;
+  bottom: 0.25rem;
+  left: 0.9375rem;
+}
+.toggler fieldset {
+  display: inline-block;
+}
+.toggler input, .toggler fieldset {
+  margin: 0;
+}
+.toggler .switch input:checked+label {
+  background: red;
+}
+.toggler .production {
+  color: red;
+  display: none;
+  margin-left: .5rem;
+  transform: translateY(-6px);
+}
+.toggler .stage {
+  display: inline-block;
+  margin-left: .5rem;
+  transform: translateY(-6px);
+}
+
+.prod .toggler .production {
+  display: inline-block;
+}
+
+.prod .toggler .stage {
+  display: none;
+}
+
 @-webkit-keyframes rotating {
   from {
     -webkit-transform: rotate(0deg);

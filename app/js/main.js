@@ -31,7 +31,8 @@ var gui = require('nw.gui'),
       left: '50%'
     },
     spinner = new Spinner(spinOpts),
-    ap;
+    ap,
+    whichDB = 'stage';
     
 // show dev tools
 //gui.Window.get().showDevTools();
@@ -44,6 +45,31 @@ $(document).on('awesomplete-selectcomplete', function(e) {
   $('.insert').addClass('hidden');
   $('.update-delete').removeClass('hidden');
 });
+
+$('#stageprod').on('change', function(e) {
+  if($(this).prop('checked')) {
+    $('body').addClass('prod');
+  } else {
+    $('body').removeClass('prod');
+  }
+  whichDB = $(this).prop('checked') ? 'prod' : 'stage';
+  var val = $('[name="seoUrlParam"]').val();
+  if(whichDB === 'prod' && savedEntries.indexOf(val)  === -1) {
+    console.log('should click')
+    setTimeout(function() {
+      $('#stageprod').trigger('click');
+    }, 100);
+  } else if(val.length > 3 && savedEntries.indexOf(val) > -1) {
+    $('.insert').addClass('hidden');
+    $('.update-delete').removeClass('hidden');
+    findOne(val);
+  } else if(val.length > 3) {
+    $('.update-delete').addClass('hidden');
+    $('.insert').removeClass('hidden');
+  } else {
+    $('.insert, .update-delete').addClass('hidden');
+  }
+})
 
 $('.x-cogs').on('click', function(e) {
   e.preventDefault();
@@ -64,12 +90,15 @@ $('[name="seoUrlParam"]').on('blur', function(e) {
   if(this.value.length > 3 && savedEntries.indexOf(this.value) > -1) {
     $('.insert').addClass('hidden');
     $('.update-delete').removeClass('hidden');
+    //$('body').addClass('enabled');
     findOne(this.value);
   } else if(this.value.length > 3) {
     $('.update-delete').addClass('hidden');
     $('.insert').removeClass('hidden');
+    //$('body').removeClass('enabled');
   } else {
     $('.insert, .update-delete').addClass('hidden');
+    //$('body').removeClass('enabled');
   }
   
 });
@@ -78,11 +107,14 @@ $('[name="seoUrlParam"]').on('keyup', function(e) {
   if(this.value.length > 3 && savedEntries.indexOf(this.value) > -1) {
     $('.insert').addClass('hidden');
     $('.update-delete').removeClass('hidden');
+    //$('body').addClass('enabled');
   } else if(this.value.length > 3) {
     $('.update-delete').addClass('hidden');
     $('.insert').removeClass('hidden');
+    //$('body').removeClass('enabled');
   } else {
     $('.insert, .update-delete').addClass('hidden');
+    //$('body').removeClass('enabled');
   }
   
 });
@@ -123,10 +155,14 @@ $('[href="insert"]').on('click', function(e) {
   e.preventDefault();
   var params = '', facets = '';
   $('input, select').each(function() {
-    if(this.name.match('^facet') || this.name ==='mfName') {
+    var val = $(this).val();
+    if(val === '') {
+      val = $(this).attr('value');
+    }
+    if(val === '' || val === undefined || this.name.match('^facet') || this.name ==='mfName' || this.name === 'seoUrlParam' || this.id === 'stageprod') {
       return;
     }
-    params += '&' + this.name + '=' + encodeURIComponent(this.value);
+    params += '&' + this.name + '=' + encodeURIComponent(val);
   });
 
   // all chosen facets
@@ -150,8 +186,10 @@ $('[href="insert"]').on('click', function(e) {
       } else {
         $('.earl').text(urlSnippet + SeoUrlParam).attr('href', urlSnippet + SeoUrlParam);
         fadeDiv('success');
-        savedEntries.push(SeoUrlParam);
-        ap.evaluate($('[name="seoUrlParam"]').get(0), {list: savedEntries});
+        if(savedEntries.indexOf(SeoUrlParam) < 0) {
+          savedEntries.push(SeoUrlParam);
+          ap.evaluate($('[name="seoUrlParam"]').get(0), {list: savedEntries});
+        }
       }
     });
   } else {
@@ -164,10 +202,14 @@ $('[href="update"]').on('click', function(e) {
   e.preventDefault();
   var params = '', facets = '';
   $('input, select').each(function() {
-    if(this.name.match('^facet') || this.name ==='mfName') {
+    var val = $(this).val();
+    if(val === '') {
+      val = $(this).attr('value');
+    }
+    if(val === '' || val === undefined || this.name.match('^facet') || this.name ==='mfName' || this.name === 'seoUrlParam' || this.id === 'stageprod') {
       return;
     }
-    params += '&' + this.name + '=' + encodeURIComponent(this.value);
+    params += '&' + this.name + '=' + encodeURIComponent(val);
   });
 
   // all chosen facets
@@ -214,11 +256,13 @@ $('[href="delete"]').on('click', function(e) {
       } else {
         $('.earl').text('').attr('href', '');
         fadeDiv('deleted');
-        var i = savedEntries.indexOf(SeoUrlParam);
-        if (i > -1) {
-          savedEntries.splice(i, 1);
+        if(whichDB === 'stage') {
+          var i = savedEntries.indexOf(SeoUrlParam);
+          if (i > -1) {
+            savedEntries.splice(i, 1);
+          }
+          ap.evaluate($('[name="seoUrlParam"]').get(0), {list: savedEntries});
         }
-        ap.evaluate($('[name="seoUrlParam"]').get(0), {list: savedEntries});
       }
     });
   } else {
@@ -230,7 +274,13 @@ $('[href="delete"]').on('click', function(e) {
 var fadeDiv = function(el) {
   $('.insert, .update-delete').addClass('hidden');
   $('.' + el).fadeIn('fast', function() {
-    setTimeout(function(){$('.' + el).fadeOut('slow'); return true;}, 5000)
+    setTimeout(function(){
+      $('.' + el).fadeOut('fast');
+      if(whichDB === 'prod') {
+        $('#stageprod').trigger('click');
+      }
+      return true;
+    }, 1000)
   })
 }
 
@@ -261,7 +311,7 @@ var init = function() {
   $facetValues.html($('<option />', {value: '', text: 'Please select'}));
   
   $.each(facets, function(k, v) {
-    $facets.append($('<option />', {value: k, text: v.Desc}).data('values', v.Values))
+    $facets.append($('<option />', {value: k.toLowerCase(), text: v.Desc}).data('values', v.Values))
   });
   
   $facets.on('change', function(e) {
@@ -348,7 +398,7 @@ var getFacets = function(cb) {
       sel.html($('<option />', {value: '', text: 'Please select'}));
       $('select[name="facet-values"]').html($('<option />', {value: '', text: 'Please select'}));
       $.each(facets, function(k, v) {
-        sel.append($('<option />', {value: k, text: v.Desc}).data('values', v.Values))
+        sel.append($('<option />', {value: k.toLowerCase(), text: v.Desc}).data('values', v.Values))
       });
       cb();
     }
@@ -414,7 +464,7 @@ var getSeoUrlParams = function(cb) {
 var findOne = function(data) {
   spinner.spin(document.querySelector('body'));
   var found = {};
-  var op = spawn('node', ['findOne', data]);
+  var op = spawn('node', ['findOne', data, whichDB]);
 
   op.stdout.setEncoding('utf8');
   
@@ -429,6 +479,16 @@ var findOne = function(data) {
   op.on('exit', function(code) {
     if(code > 0) {
       console.log('Oh no, there seems to be an error: ' , code);
+    } else if (whichDB === 'prod'){
+      try {
+        if(found.SEOURLPARAM) {
+          $('.insert').addClass('hidden');
+          $('.update-delete').removeClass('hidden');
+        }
+      } catch(e) {
+        $('.update-delete').addClass('hidden');
+        $('.insert').removeClass('hidden');
+      }
     } else {
       var params = found.QUERYPARAMS.split('&facet=')[0]
 
@@ -466,7 +526,7 @@ var findOne = function(data) {
  */
 var insertOne = function(data, cb) {
   spinner.spin(document.querySelector('body'));
-  var op = spawn('node', ['insertOne', data.SeoUrlParam, data.queryParams]);
+  var op = spawn('node', ['insertOne', data.SeoUrlParam, data.queryParams, whichDB]);
   op.stdout.setEncoding('utf8');
   
   op.stdout.on('data', function(data) {
@@ -487,7 +547,7 @@ var insertOne = function(data, cb) {
  */
 var updateOne = function(data, cb) {
   spinner.spin(document.querySelector('body'));
-  var op = spawn('node', ['updateOne', data.queryParams, data.SeoUrlParam]);
+  var op = spawn('node', ['updateOne', data.queryParams, data.SeoUrlParam, whichDB]);
   op.stdout.setEncoding('utf8');
   
   op.stdout.on('data', function(data) {
@@ -508,7 +568,7 @@ var updateOne = function(data, cb) {
  */
 var deleteOne = function(data, cb) {
   spinner.spin(document.querySelector('body'));
-  var op = spawn('node', ['deleteOne', data.SeoUrlParam]);
+  var op = spawn('node', ['deleteOne', data.SeoUrlParam, whichDB]);
   op.stdout.setEncoding('utf8');
   
   op.stdout.on('data', function(data) {

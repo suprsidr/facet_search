@@ -1,18 +1,16 @@
 module.exports = {
-  db : {
-    host: 'localhost',
-    port: 27017,
-    name: 'hhproducts',
-    user: 'appAdmin',
-    pass: 'WsP010867@#$%'
+  stage : {
+    host: 'cmp02-ws-stg-db01',
+    port: 50000,
+    name: 'STG01DB',
+    user: 'wcdbuser',
+    pass: 'h0r1z0n'
   },
-  options: {
-    host: '104.236.76.97',
-    port: 22,
-    username: 'root',
-    password: 'WsP010867$%^&',
-    path: '/opt/mean/',
-    file: './hh2products.js',
-    cmd: 'cd /opt/mean && node in.js'
+  prod: {
+    host: 'cmp02-ws-prd-db01',
+    port: 50000,
+    name: 'PRD01DB',
+    user: 'wcdbuser',
+    pass: 'h0r1z0n'
   }
 }

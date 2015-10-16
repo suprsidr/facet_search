@@ -1,13 +1,14 @@
-# HH.com Faceted Search Builder
-Build and save faceted search params to DB
+# HH Product Data API Updater
+Update HH product data API that we host on DO
 
 # Quick start
 The only development dependencies of this project is
-[Node.js](https://nodejs.org). So just make sure you have it installed.
+[Node.js](https://nodejs.org) and [MongoDB](https://www.mongodb.org). So just
+make sure you have them installed.
 Then type few commands known to every Node developer...
 ```
-git clone https://github.com/suprsidr/facet_search.git
-cd facet_search
+git clone https://github.com/suprsidr/api_updater.git
+cd api_updater
 npm install
 npm start
 ```
@@ -44,6 +45,14 @@ You can create Windows installer only when running on Windows, the same is true 
 
 ## Special precautions for Windows
 As installer [NSIS](http://nsis.sourceforge.net/Main_Page) is used. You have to install it (version 3.0), and add NSIS folder to PATH in Environment Variables, so it is reachable to scripts in this project (path should look something like `C:/Program Files (x86)/NSIS`).
+
+## Hints:
+
+After initial run of step 2 (Insert in local DB) - future runs of this step will be much quicker if you create a unique index on ProdID
+
+```
+db.products.createIndex( { "ProdID": 1 }, { unique: true } )
+```
 
 # License
 

@@ -2,10 +2,12 @@
  * @author wpatterson
  */
 var ibmdb = require('ibm_db'),
-    async = require('async');
+    async = require('async'),
+    c = require('./config');
     
 function getData(cb) {
-  ibmdb.open("DRIVER={DB2};DATABASE=STG01DB;HOSTNAME=cmp02-ws-stg-db01;UID=wcdbuser;PWD=h0r1z0n;PORT=50000;PROTOCOL=TCPIP", function (err,conn) {
+  var db = c[process.argv[3]];
+  ibmdb.open("DRIVER={DB2};DATABASE="+db.name+";HOSTNAME="+db.host+";UID="+db.user+";PWD="+db.pass+";PORT="+db.port+";PROTOCOL=TCPIP", function (err,conn) {
     if (err) cb(err);
     //console.log(process.argv[2]);
     var q = "select seourlparam, queryparams from x_marketing_url where seourlparam = '" + process.argv[2] + "' with ur";

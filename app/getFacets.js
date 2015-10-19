@@ -3,7 +3,8 @@
  */
 var ibmdb = require('ibm_db'),
     path = require('path'),
-    LOCALAPPDATA = path.join(process.env.LOCALAPPDATA, 'faceted_search'),
+    c = require('./config'),
+    LOCALAPPDATA = c.LOCALAPPDATA,
     _ = require('lodash'),
     async = require('async'),
     file = require('./file'),
@@ -11,7 +12,8 @@ var ibmdb = require('ibm_db'),
     
 function getData(cb) {
   console.log('Querying for Facets');
-  ibmdb.open("DRIVER={DB2};DATABASE=STG01DB;HOSTNAME=cmp02-ws-stg-db01;UID=wcdbuser;PWD=h0r1z0n;PORT=50000;PROTOCOL=TCPIP", function (err,conn) {
+  var db = c.stage;
+  ibmdb.open("DRIVER={DB2};DATABASE="+db.name+";HOSTNAME="+db.host+";UID="+db.user+";PWD="+db.pass+";PORT="+db.port+";PROTOCOL=TCPIP", function (err,conn) {
     if (err) cb(err);
     var q = "select b.SRCHFIELDNAME \"ID\",av.identifier \"Name\",c.name \"Desc\" from attr a, attrdesc c, attrdictsrchconf b, attrval av , facet f where a.attr_id = b.attr_id and a.attr_id = c.attr_id and f.attr_id = c.attr_id and a.attr_id = av.attr_id and av.identifier not like '%ZZ_%' order by c.name asc with ur";
     conn.query(q, [], function (err, data) {

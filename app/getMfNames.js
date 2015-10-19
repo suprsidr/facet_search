@@ -3,13 +3,15 @@
  */
 var ibmdb = require('ibm_db'),
     path = require('path'),
-    LOCALAPPDATA = path.join(process.env.LOCALAPPDATA, 'faceted_search'),
+    c = require('./config'),
+    LOCALAPPDATA = c.LOCALAPPDATA,
     async = require('async'),
     file = require('./file');
     
 function getData(cb) {
   console.log('Querying for MfNames');
-  ibmdb.open("DRIVER={DB2};DATABASE=STG01DB;HOSTNAME=cmp02-ws-stg-db01;UID=wcdbuser;PWD=h0r1z0n;PORT=50000;PROTOCOL=TCPIP", function (err,conn) {
+  var db = c.stage;
+  ibmdb.open("DRIVER={DB2};DATABASE="+db.name+";HOSTNAME="+db.host+";UID="+db.user+";PWD="+db.pass+";PORT="+db.port+";PROTOCOL=TCPIP", function (err,conn) {
     if (err) cb(err);
     var q = "select distinct mfname from catentry where catenttype_id = 'ProductBean' and mfname not in ('Accurail','Athearn','Atlas','Atlas O Gauge','Bachmann','Bullfrog Snot','Brooklyn Peddler','Broadway Limited Imports','BLMA Models','Bowser Manufacturing','Caboose Industries','Chooch Enterprises','Mantua ','Digitrax','Estes Industries','Fox Valley','JTT Scenery Products','Kadee','Kato','Life-Like Trains','Lionel','McHenry','Model Power','Miniatronics','Model Rectifier Corporation','MODEL RECTIFIER CORP-AOSHIMA','Microscale','MTH','Mini Metals','Northcoast Engineering','Peco','Rix Products','Roundhouse','Rapido','Tru-Color Paint','Woodland Scenics','test MfName','null') and field4 not in ('ACU','ARI','ATL','ATO','BAC','BFS','BKP','BLI','BLM','BLS','BMM','BOW','CAB','CHO','CSM','DGT','FRP','FVM','IMR','JTT','KAD','KAL','KAT','LNL','MDP','MNT','MRC','MSI','MTH','MWI','NCE','PCT','PGH','PPC','RIX','RPI','TNC','TUP','UST','WOO','XUR') order by mfname asc with ur";
     conn.query(q, [], function (err, data) {

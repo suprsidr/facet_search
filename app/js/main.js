@@ -5,8 +5,9 @@
 var gui = require('nw.gui'),
     spawn = require('child_process').spawn,
     path = require('path'),
+    c = require('./config'),
+    LOCALAPPDATA = c.LOCALAPPDATA,
     fs = require('fs'),
-    LOCALAPPDATA = path.join(process.env.LOCALAPPDATA, 'faceted_search'),
     _ = require('lodash'),
     async = require('async'),
     savedEntries = [],
@@ -162,7 +163,11 @@ $('[href="insert"]').on('click', function(e) {
     if(val === '' || val === undefined || this.name.match('^facet') || this.name ==='mfName' || this.name === 'seoUrlParam' || this.id === 'stageprod') {
       return;
     }
-    params += '&' + this.name + '=' + encodeURIComponent(val);
+    if(this.name === 'searchTerm') {
+        params += '&' + this.name + '=' + encodeURIComponent(val).replace(/%20/g, '+');
+    } else {
+        params += '&' + this.name + '=' + encodeURIComponent(val);
+    }
   });
 
   // all chosen facets
@@ -209,7 +214,11 @@ $('[href="update"]').on('click', function(e) {
     if(val === '' || val === undefined || this.name.match('^facet') || this.name ==='mfName' || this.name === 'seoUrlParam' || this.id === 'stageprod') {
       return;
     }
-    params += '&' + this.name + '=' + encodeURIComponent(val);
+    if(this.name === 'searchTerm') {
+        params += '&' + this.name + '=' + encodeURIComponent(val).replace(/%20/g, '+');
+    } else {
+        params += '&' + this.name + '=' + encodeURIComponent(val);
+    }
   });
 
   // all chosen facets
@@ -263,6 +272,7 @@ $('[href="delete"]').on('click', function(e) {
           }
           ap.evaluate($('[name="seoUrlParam"]').get(0), {list: savedEntries});
         }
+        init();
       }
     });
   } else {
@@ -314,7 +324,7 @@ var init = function() {
     $facets.append($('<option />', {value: k.toLowerCase(), text: v.Desc}).data('values', v.Values))
   });
   
-  $facets.on('change', function(e) {
+  $facets.off().on('change', function(e) {
     e.preventDefault();
     $facetValues.html($('<option />', {value: '', text: 'Please select'}));
     var vals = $(this).find('option:selected').data('values');
@@ -323,7 +333,7 @@ var init = function() {
     })
   });
   
-  $facetValues.on('change', function(e) {
+  $facetValues.off().on('change', function(e) {
     e.preventDefault();
     var a = $('<a />', {href: '#'}).on('click', function(e) {
           e.preventDefault();

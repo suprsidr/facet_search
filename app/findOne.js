@@ -6,7 +6,7 @@ var ibmdb = require('ibm_db'),
     c = require('./config');
     
 function getData(cb) {
-  var db = c[process.argv[3]];
+  var db = c.stage;
   ibmdb.open("DRIVER={DB2};DATABASE="+db.name+";HOSTNAME="+db.host+";UID="+db.user+";PWD="+db.pass+";PORT="+db.port+";PROTOCOL=TCPIP", function (err,conn) {
     if (err) cb(err);
     //console.log(process.argv[2]);

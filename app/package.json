@@ -4,7 +4,7 @@
   "main": "./index.html",
   "description": "Build and save faceted search params to DB",
   "repository": "https://github.com/suprsidr/facet_search.git",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "window": {
     "title": "HH.com Faceted Search Builder",
     "icon": "./app.png",

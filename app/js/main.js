@@ -164,7 +164,7 @@ $('[href="insert"]').on('click', function(e) {
       return;
     }
     if(this.name === 'searchTerm') {
-        params += '&' + this.name + '=' + encodeURIComponent(val).replace(/%20/g, '+');
+        params += '&' + this.name + '=' + encodeURIComponent(val).replace(/%20/g, ' ');
     } else {
         params += '&' + this.name + '=' + encodeURIComponent(val);
     }
@@ -195,6 +195,10 @@ $('[href="insert"]').on('click', function(e) {
           savedEntries.push(SeoUrlParam);
           ap.evaluate($('[name="seoUrlParam"]').get(0), {list: savedEntries});
         }
+        setTimeout(function(){
+          console.log('blurring');
+          $('[name="seoUrlParam"]').trigger('blur');
+        }, 1000);
       }
     });
   } else {
@@ -215,7 +219,7 @@ $('[href="update"]').on('click', function(e) {
       return;
     }
     if(this.name === 'searchTerm') {
-        params += '&' + this.name + '=' + encodeURIComponent(val).replace(/%20/g, '+');
+        params += '&' + this.name + '=' + encodeURIComponent(val).replace(/%20/g, ' ');
     } else {
         params += '&' + this.name + '=' + encodeURIComponent(val);
     }
@@ -242,6 +246,10 @@ $('[href="update"]').on('click', function(e) {
       } else {
         $('.earl').text(urlSnippet + SeoUrlParam).attr('href', urlSnippet + SeoUrlParam);
         fadeDiv('updated');
+        setTimeout(function(){
+          console.log('blurring');
+          $('[name="seoUrlParam"]').trigger('blur');
+        }, 1000);
       }
     });
   } else {
@@ -290,7 +298,7 @@ var fadeDiv = function(el) {
         $('#stageprod').trigger('click');
       }
       return true;
-    }, 1000)
+    }, 500)
   })
 }
 

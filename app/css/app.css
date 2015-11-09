@@ -18,7 +18,7 @@ body {
 
 h3 {
   margin: 0; }
-input[type="text"], input[type="number"], select, .button, .earl { 
+input[type="text"], input[type="number"], select, .button, .earl {
   margin-bottom: 0;}
 button {
   padding: 0;
@@ -81,7 +81,7 @@ select, option {
 .icon-checkbox-checked {
   width: 16px;
   height: 16px; }
-  
+
 .nav-bar {
     background-color: #000;
     border-radius: 10px 10px 0 0;
@@ -96,6 +96,59 @@ select, option {
 }
 .nav-bar h3 {
   color: #f9be03;
+}
+.nav-bar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-bar .sub-menu > li {
+  display: inline-block;
+}
+.nav-bar .sub-menu .drop-down {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  display: none;
+}
+.nav-bar .sub-menu .drop-down li {
+  background: #fff;
+}
+.nav-bar .sub-menu .drop-down li a {
+  display: block;
+  color: #222;
+  padding: .5rem 1rem;
+}
+.nav-bar .sub-menu .drop-down li a:hover {
+  color: #999;
+}
+.nav-bar .sub-menu li:hover .drop-down {
+  display: block;
+  z-index: 10;
+}
+
+.seo-list {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 80%;
+  height: 80%;
+  background: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 1rem;
+}
+.seo-list .seo-closer {
+  float: right;
+}
+.seo-list ul {
+  color: #222;
+  width: 100%;
+  list-style: none;
 }
 
 ul.radio-group {
@@ -141,7 +194,7 @@ ul.radio-group.page-size {
   margin-bottom: 0;
   font-family: monospace, monospace;
   font-size: 0.8em; }
-  
+
 .toggler {
   position: absolute;
   bottom: 0.25rem;
@@ -200,7 +253,3 @@ ul.radio-group.page-size {
   -webkit-animation: rotating 2s linear infinite;
   animation: rotating 2s linear infinite;
 }
-
-
-
-

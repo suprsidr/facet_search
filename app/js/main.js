@@ -34,7 +34,7 @@ var gui = require('nw.gui'),
     spinner = new Spinner(spinOpts),
     ap,
     whichDB = 'stage';
-    
+
 // show dev tools
 //gui.Window.get().showDevTools();
 
@@ -72,9 +72,32 @@ $('#stageprod').on('change', function(e) {
   }
 })
 
-$('.x-cogs').on('click', function(e) {
+$('a[href="dev-tools"]').on('click', function(e) {
   e.preventDefault();
   gui.Window.get().showDevTools();
+});
+
+$('a[href="seo-list"]').on('click', function(e) {
+  e.preventDefault();
+  var listcontents = $('<ul />');
+  savedEntries.forEach(function(entry) {
+    listcontents.append($('<li />', {text: entry}));
+  });
+  var list = $('<div />', {class: 'seo-list'})
+      .append(
+        $('<a />', {class: 'seo-closer', html: '<svg class="icon icon-squared-cross"><use xlink:href="#icon-squared-cross"></use></svg>'})
+        .on('click', function(e) {
+          e.preventDefault();
+          $('.seo-list').remove();
+        })
+      )
+      .append(
+        $('<ul />')
+        .append(
+          listcontents.html()
+        )
+      )
+      .appendTo('body');
 });
 
 $('.x-reset').on('click', function(e) {
@@ -101,7 +124,7 @@ $('[name="seoUrlParam"]').on('blur', function(e) {
     $('.insert, .update-delete').addClass('hidden');
     //$('body').removeClass('enabled');
   }
-  
+
 });
 
 $('[name="seoUrlParam"]').on('keyup', function(e) {
@@ -117,7 +140,7 @@ $('[name="seoUrlParam"]').on('keyup', function(e) {
     $('.insert, .update-delete').addClass('hidden');
     //$('body').removeClass('enabled');
   }
-  
+
 });
 
 $('.refresher').on('click', function(e) {
@@ -174,11 +197,11 @@ $('[href="insert"]').on('click', function(e) {
   $('.current-facets > li').each(function() {
     facets += '&facet=' + $(this).text();
   });
-  
-  
+
+
   var SeoUrlParam = $('[name="seoUrlParam"]').val(),
       queryParams = params.replace('&', '') + facets;
-      
+
   if(SeoUrlParam !== '') {
     insertOne({
       SeoUrlParam: SeoUrlParam,
@@ -189,7 +212,8 @@ $('[href="insert"]').on('click', function(e) {
         console.log(err);
         fadeDiv('error');
       } else {
-        $('.earl').text(urlSnippet + SeoUrlParam).attr('href', urlSnippet + SeoUrlParam);
+        var snippet = whichDB === 'stage' ? urlSnippet : urlSnippet.replace('stage2', 'www');
+        $('.earl').text(snippet + SeoUrlParam).attr('href', snippet + SeoUrlParam);
         fadeDiv('success');
         if(savedEntries.indexOf(SeoUrlParam) < 0) {
           savedEntries.push(SeoUrlParam);
@@ -204,7 +228,7 @@ $('[href="insert"]').on('click', function(e) {
   } else {
     fadeDiv('param-error');
   }
-  
+
 });
 
 $('[href="update"]').on('click', function(e) {
@@ -229,11 +253,11 @@ $('[href="update"]').on('click', function(e) {
   $('.current-facets > li').each(function() {
     facets += '&facet=' + $(this).text();
   });
-  
-  
+
+
   var SeoUrlParam = $('[name="seoUrlParam"]').val(),
       queryParams = params.replace('&', '') + facets;
-      
+
   if(SeoUrlParam !== '') {
     updateOne({
       SeoUrlParam: SeoUrlParam,
@@ -244,7 +268,8 @@ $('[href="update"]').on('click', function(e) {
         console.log(err);
         fadeDiv('error');
       } else {
-        $('.earl').text(urlSnippet + SeoUrlParam).attr('href', urlSnippet + SeoUrlParam);
+        var snippet = whichDB === 'stage' ? urlSnippet : urlSnippet.replace('stage2', 'www');
+        $('.earl').text(snippet + SeoUrlParam).attr('href', snippet + SeoUrlParam);
         fadeDiv('updated');
         setTimeout(function(){
           console.log('blurring');
@@ -255,13 +280,13 @@ $('[href="update"]').on('click', function(e) {
   } else {
     fadeDiv('param-error');
   }
-  
+
 });
 
 $('[href="delete"]').on('click', function(e) {
   e.preventDefault();
   var SeoUrlParam = $('[name="seoUrlParam"]').val();
-      
+
   if(SeoUrlParam !== '') {
     deleteOne({
       SeoUrlParam: SeoUrlParam
@@ -286,7 +311,7 @@ $('[href="delete"]').on('click', function(e) {
   } else {
     fadeDiv('param-error');
   }
-  
+
 });
 
 var fadeDiv = function(el) {
@@ -317,8 +342,8 @@ var init = function() {
   $.each(cats, function(k, v) {
     $cats.append($('<option />', {value: v.groupID, text: v.id + '(' + v.name + ')'}))
   })
-  
-  
+
+
   /**
    * Facets
    */
@@ -327,11 +352,11 @@ var init = function() {
   $facets.html($('<option />', {value: '', text: 'Please select'}));
   var $facetValues = $('select[name="facet-values"]');
   $facetValues.html($('<option />', {value: '', text: 'Please select'}));
-  
+
   $.each(facets, function(k, v) {
     $facets.append($('<option />', {value: k.toLowerCase(), text: v.Desc}).data('values', v.Values))
   });
-  
+
   $facets.off().on('change', function(e) {
     e.preventDefault();
     $facetValues.html($('<option />', {value: '', text: 'Please select'}));
@@ -340,7 +365,7 @@ var init = function() {
       $facetValues.append($('<option />', {value: vals[i], text: vals[i]}))
     })
   });
-  
+
   $facetValues.off().on('change', function(e) {
     e.preventDefault();
     var a = $('<a />', {href: '#'}).on('click', function(e) {
@@ -352,8 +377,8 @@ var init = function() {
         )
     $('.current-facets').append($('<li />', {text: encodeURIComponent($facets.val() + '_ntk_cs:"' +  $facetValues.val() + '"')}).prepend(a))
   });
-  
-  
+
+
   /**
    * MfNames
    */
@@ -363,7 +388,7 @@ var init = function() {
   $.each(mfnames, function(i) {
     $mfnames.append($('<option />', {value: mfnames[i], text: mfnames[i]}))
   });
-  
+
   getSeoUrlParams();
   console.log('Loaded');
 }
@@ -376,11 +401,11 @@ var getMfNames = function(cb) {
   var op = spawn('node', ['getMfNames']);
 
   op.stdout.setEncoding('utf8');
-  
+
   op.stdout.on('data', function(data) {
     console.log(data);
   })
-  
+
   op.on('exit', function(code) {
     if(code > 0) {
       cb('Oh no, there seems to be an error: ' , code);
@@ -403,11 +428,11 @@ var getFacets = function(cb) {
   var op = spawn('node', ['getFacets']);
 
   op.stdout.setEncoding('utf8');
-  
+
   op.stdout.on('data', function(data) {
     console.log(data);
   });
-  
+
   op.on('exit', function(code) {
     if(code > 0) {
       cb('Oh no, there seems to be an error: ' , code);
@@ -431,11 +456,11 @@ var getCategories = function(cb) {
   var op = spawn('node', ['getCategories']);
 
   op.stdout.setEncoding('utf8');
-  
+
   op.stdout.on('data', function(data) {
     console.log(data);
   });
-  
+
   op.on('exit', function(code) {
     if(code > 0) {
       cb('Oh no, there seems to be an error: ' , code);
@@ -458,7 +483,7 @@ var getSeoUrlParams = function(cb) {
   var op = spawn('node', ['getSeoUrlParams']);
 
   op.stdout.setEncoding('utf8');
-  
+
   op.stdout.on('data', function(data) {
     try {
       savedEntries = JSON.parse(data)[0];
@@ -466,7 +491,7 @@ var getSeoUrlParams = function(cb) {
       console.log(data);
     }
   });
-  
+
   op.on('exit', function(code) {
     if(code > 0) {
       console.log('Oh no, there seems to be an error: ' , code);
@@ -485,7 +510,7 @@ var findOne = function(data) {
   var op = spawn('node', ['findOne', data, whichDB]);
 
   op.stdout.setEncoding('utf8');
-  
+
   op.stdout.on('data', function(data) {
     try {
       found = JSON.parse(data)[0][0];
@@ -493,7 +518,7 @@ var findOne = function(data) {
       console.log(data);
     }
   });
-  
+
   op.on('exit', function(code) {
     if(code > 0) {
       console.log('Oh no, there seems to be an error: ' , code);
@@ -511,15 +536,15 @@ var findOne = function(data) {
       var params = found.QUERYPARAMS.split('&facet=')[0]
 
       paramObj = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
-      
+
       $.each(paramObj, function(k, v) {
         var el = $('[name="' + k + '"]');
         el.val(v);
         el.find('[value="' + v + '"]').prop('selected', true).trigger('click');
       })
-      
+
       var facetArr = found.QUERYPARAMS.split('&facet=');
-      
+
       facetArr.shift();
       $('.current-facets').empty();
       $.each(facetArr, function(i) {
@@ -532,8 +557,9 @@ var findOne = function(data) {
             )
         $('.current-facets').append($('<li />', {text: facetArr[i]}).prepend(a))
       });
-      
-      $('.earl').text(urlSnippet + found.SEOURLPARAM).attr('href', urlSnippet + found.SEOURLPARAM);
+      var snippet = whichDB === 'stage' ? urlSnippet : urlSnippet.replace('stage2', 'www');
+      $('.earl').text(snippet + found.SEOURLPARAM).attr('href', snippet + found.SEOURLPARAM);
+      //$('.earl').text(urlSnippet + found.SEOURLPARAM).attr('href', urlSnippet + found.SEOURLPARAM);
     }
     spinner.spin(false);
   });
@@ -546,7 +572,7 @@ var insertOne = function(data, cb) {
   spinner.spin(document.querySelector('body'));
   var op = spawn('node', ['insertOne', data.SeoUrlParam, data.queryParams, whichDB]);
   op.stdout.setEncoding('utf8');
-  
+
   op.stdout.on('data', function(data) {
     console.log(data);
   });
@@ -567,7 +593,7 @@ var updateOne = function(data, cb) {
   spinner.spin(document.querySelector('body'));
   var op = spawn('node', ['updateOne', data.queryParams, data.SeoUrlParam, whichDB]);
   op.stdout.setEncoding('utf8');
-  
+
   op.stdout.on('data', function(data) {
     console.log(data);
   });
@@ -588,7 +614,7 @@ var deleteOne = function(data, cb) {
   spinner.spin(document.querySelector('body'));
   var op = spawn('node', ['deleteOne', data.SeoUrlParam, whichDB]);
   op.stdout.setEncoding('utf8');
-  
+
   op.stdout.on('data', function(data) {
     console.log(data);
   });

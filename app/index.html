@@ -35,8 +35,31 @@
     <div class="fixed" style="-webkit-app-region: drag;">
       <div class="row">
         <div class="small-12 columns text-center nav-bar" style="-webkit-app-region: drag;">
-          <span style="-webkit-app-region: no-drag; float: left;"><a title="Show Dev Tools" style="margin-left: 1rem;" class="x-cogs"><svg class="icon icon-squared-cross"><use xlink:href="#icon-cogs"></use></svg></a><a title="Reset" style="margin-left: 1rem;" class="x-reset"><svg class="icon icon-squared-cross"><use xlink:href="#icon-loop2"></use></svg></a></span>
-          <a class="x-closer" style="-webkit-app-region: no-drag; margin-right: 1rem;"><svg class="icon icon-squared-cross"><use xlink:href="#icon-squared-cross"></use></svg></a>
+          <ul class="sub-menu" style="-webkit-app-region: no-drag; float: left;">
+            <li>
+              <a title="Show Dev Tools" style="margin-left: 1rem;" class="x-cogs">
+                <svg class="icon icon-squared-cross">
+                  <use xlink:href="#icon-cogs"></use>
+                </svg>
+              </a>
+              <ul class="drop-down">
+                <li><a href="dev-tools">Dev Tools</a></li>
+                <li><a href="seo-list">SEO List</a></li>
+              </ul>
+            </li>
+            <li>
+              <a title="Reset" style="margin-left: 1rem;" class="x-reset">
+                <svg class="icon icon-squared-cross">
+                  <use xlink:href="#icon-loop2"></use>
+                </svg>
+              </a>
+            </li>
+          </ul>
+          <a class="x-closer" style="-webkit-app-region: no-drag; margin-right: 1rem;">
+            <svg class="icon icon-squared-cross">
+              <use xlink:href="#icon-squared-cross"></use>
+            </svg>
+          </a>
           <h3>HH.com Faceted Search Builder</h3>
         </div>
       </div>

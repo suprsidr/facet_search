@@ -253,6 +253,16 @@ ul.radio-group.page-size {
   margin-left: .2rem;
 }
 
+.button, button {
+  background-color: #dddddd;
+  border-color: #a8a8a8;
+  color: #222;
+}
+.button:focus, .button:hover, button:focus, button:hover {
+  background-color: #a8a8a8;
+  color: #000;
+}
+
 @-webkit-keyframes rotating {
   from {
     -webkit-transform: rotate(0deg);

@@ -229,6 +229,30 @@ ul.radio-group.page-size {
   display: none;
 }
 
+.wwwearl {
+  position: absolute;
+  left: -9999px;
+}
+
+#seourl {
+  position: relative;
+}
+
+#seourl .copy-buttons {
+  display: none;
+  position: absolute;
+  top: 9px;
+  right: 0;
+}
+
+#seourl:hover .copy-buttons {
+  display: inline-block;
+}
+
+#seourl .copy-buttons button {
+  margin-left: .2rem;
+}
+
 @-webkit-keyframes rotating {
   from {
     -webkit-transform: rotate(0deg);

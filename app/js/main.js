@@ -105,6 +105,30 @@ $('.x-reset').on('click', function(e) {
   init();
 });
 
+$('[class^="copy-"]').on('click', function(e) {
+  e.preventDefault();
+  var c = $(this).attr('class') === 'copy-stage' ? '.earl' : '.wwwearl';
+  // Select the link anchor text
+  var link = document.querySelector(c);
+  var range = document.createRange();
+  range.selectNode(link);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+
+  try {
+    // Now that we've selected the anchor text, execute the copy command
+    var successful = document.execCommand('copy');
+    var msg = successful ? 'successful' : 'unsuccessful';
+    console.log('Copy email command was ' + msg);
+  } catch(err) {
+    console.log('Oops, unable to copy');
+  }
+
+  // Remove the selections - NOTE: Should use
+  // removeRange(range) when it is supported
+  window.getSelection().removeAllRanges();
+});
+
 $('.earl').on('click', function(e) {
   e.preventDefault();
   gui.Shell.openExternal($(this).attr('href'));
@@ -212,8 +236,8 @@ $('[href="insert"]').on('click', function(e) {
         console.log(err);
         fadeDiv('error');
       } else {
-        var snippet = whichDB === 'stage' ? urlSnippet : urlSnippet.replace('stage2', 'www');
-        $('.earl').text(snippet + SeoUrlParam).attr('href', snippet + SeoUrlParam);
+        $('.earl').text(urlSnippet + SeoUrlParam).attr('href', urlSnippet + SeoUrlParam);
+        $('.wwwearl').text(urlSnippet.replace('stage2', 'www') + SeoUrlParam).attr('href', urlSnippet.replace('stage2', 'www') + SeoUrlParam);
         fadeDiv('success');
         if(savedEntries.indexOf(SeoUrlParam) < 0) {
           savedEntries.push(SeoUrlParam);
@@ -268,8 +292,8 @@ $('[href="update"]').on('click', function(e) {
         console.log(err);
         fadeDiv('error');
       } else {
-        var snippet = whichDB === 'stage' ? urlSnippet : urlSnippet.replace('stage2', 'www');
-        $('.earl').text(snippet + SeoUrlParam).attr('href', snippet + SeoUrlParam);
+        $('.earl').text(urlSnippet + SeoUrlParam).attr('href', urlSnippet + SeoUrlParam);
+        $('.wwwearl').text(urlSnippet.replace('stage2', 'www') + SeoUrlParam).attr('href', urlSnippet.replace('stage2', 'www') + SeoUrlParam);
         fadeDiv('updated');
         setTimeout(function(){
           console.log('blurring');
@@ -297,6 +321,7 @@ $('[href="delete"]').on('click', function(e) {
         fadeDiv('error');
       } else {
         $('.earl').text('').attr('href', '');
+        $('.wwwearl').text('').attr('href', '');
         fadeDiv('deleted');
         if(whichDB === 'stage') {
           var i = savedEntries.indexOf(SeoUrlParam);
@@ -333,6 +358,7 @@ var init = function() {
   $('.current-facets').empty();
   $('.insert, .update-delete').addClass('hidden');
   $('.earl').text('').attr('href', '');
+  $('.wwwearl').text('').attr('href', '');
   /*
    * Categories
    */
@@ -557,9 +583,8 @@ var findOne = function(data) {
             )
         $('.current-facets').append($('<li />', {text: facetArr[i]}).prepend(a))
       });
-      var snippet = whichDB === 'stage' ? urlSnippet : urlSnippet.replace('stage2', 'www');
-      $('.earl').text(snippet + found.SEOURLPARAM).attr('href', snippet + found.SEOURLPARAM);
-      //$('.earl').text(urlSnippet + found.SEOURLPARAM).attr('href', urlSnippet + found.SEOURLPARAM);
+      $('.earl').text(urlSnippet + found.SEOURLPARAM).attr('href', urlSnippet + found.SEOURLPARAM);
+      $('.wwwearl').text(urlSnippet.replace('stage2', 'www') + found.SEOURLPARAM).attr('href', urlSnippet.replace('stage2', 'www') + found.SEOURLPARAM);
     }
     spinner.spin(false);
   });

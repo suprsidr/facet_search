@@ -105,9 +105,10 @@ $('.x-reset').on('click', function(e) {
   init();
 });
 
-$('[class^="copy-"]').on('click', function(e) {
+$('.copy-stage, .copy-www').on('click', function(e) {
   e.preventDefault();
   var c = $(this).attr('class') === 'copy-stage' ? '.earl' : '.wwwearl';
+  console.log(c);
   // Select the link anchor text
   var link = document.querySelector(c);
   var range = document.createRange();

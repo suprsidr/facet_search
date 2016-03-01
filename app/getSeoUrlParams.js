@@ -4,12 +4,12 @@
 var ibmdb = require('ibm_db'),
     async = require('async'),
     c = require('./config');
-    
+
 function getData(cb) {
   var db = c.stage;
   ibmdb.open("DRIVER={DB2};DATABASE="+db.name+";HOSTNAME="+db.host+";UID="+db.user+";PWD="+db.pass+";PORT="+db.port+";PROTOCOL=TCPIP", function (err,conn) {
     if (err) cb(err);
-    var q = "select seourlparam from x_marketing_url order by seourlparam asc with ur";
+    var q = "select seourlparam from x_marketing_url where store_id = "+ c.storeId +" order by seourlparam asc with ur";
     conn.query(q, [], function (err, data) {
       if (err) cb(err);
       conn.close(function () {

@@ -11,7 +11,7 @@ var gui = require('nw.gui'),
     _ = require('lodash'),
     async = require('async'),
     savedEntries = [],
-    urlSnippet = 'http://stage2.horizonhobby.com/webapp/wcs/stores/servlet/MarketingSearchUrl?catalogId=10051&orderId=.&langId=-1&storeId=10151&seoUrlParam=',
+    urlSnippet = 'http://stage2.horizonhobby.com/webapp/wcs/stores/servlet/MarketingSearchUrl?catalogId='+c.catalogId+'&orderId=.&langId=-1&storeId='+c.storeId+'&seoUrlParam=',
     version = require('./package.json').version,
     spinOpts = {
       lines: 13,
@@ -70,7 +70,7 @@ $('#stageprod').on('change', function(e) {
   } else {
     $('.insert, .update-delete').addClass('hidden');
   }
-})
+});
 
 $('a[href="dev-tools"]').on('click', function(e) {
   e.preventDefault();
@@ -92,9 +92,12 @@ $('a[href="seo-list"]').on('click', function(e) {
         })
       )
       .append(
-        $('<ul />')
+        $('<div>')
         .append(
-          listcontents.html()
+          $('<ul />')
+            .append(
+              listcontents.html()
+            )
         )
       )
       .appendTo('body');
@@ -108,7 +111,7 @@ $('.x-reset').on('click', function(e) {
 $('.copy-stage, .copy-www').on('click', function(e) {
   e.preventDefault();
   var c = $(this).attr('class') === 'copy-stage' ? '.earl' : '.wwwearl';
-  console.log(c);
+  //console.log(c);
   // Select the link anchor text
   var link = document.querySelector(c);
   var range = document.createRange();
@@ -120,7 +123,7 @@ $('.copy-stage, .copy-www').on('click', function(e) {
     // Now that we've selected the anchor text, execute the copy command
     var successful = document.execCommand('copy');
     var msg = successful ? 'successful' : 'unsuccessful';
-    console.log('Copy email command was ' + msg);
+    console.log('Copy command was ' + msg);
   } catch(err) {
     console.log('Oops, unable to copy');
   }
@@ -196,7 +199,7 @@ $('[name="mfName"]').on('change', function(e) {
       })
       .append(
         $('<img />', {src: 'img/bin.svg', class: 'icon icon-squared-cross'})
-      )
+      );
   $('.current-facets').append($('<li />', {text: encodeURIComponent('mfName_ntk_cs:"' + el.val() + '"')}).prepend(a))
 });
 
@@ -349,9 +352,9 @@ var fadeDiv = function(el) {
         $('#stageprod').trigger('click');
       }
       return true;
-    }, 500)
-  })
-}
+    }, 500);
+  });
+};
 
 var init = function() {
   // clear everything
@@ -368,7 +371,7 @@ var init = function() {
   $cats.html($('<option />', {value: '', text: 'Please select'}));
   $.each(cats, function(k, v) {
     $cats.append($('<option />', {value: v.groupID, text: v.id + '(' + v.name + ')'}))
-  })
+  });
 
 
   /**
@@ -390,7 +393,7 @@ var init = function() {
     var vals = $(this).find('option:selected').data('values');
     $.each(vals, function(i) {
       $facetValues.append($('<option />', {value: vals[i], text: vals[i]}))
-    })
+    });
   });
 
   $facetValues.off().on('change', function(e) {
@@ -401,7 +404,7 @@ var init = function() {
         })
         .append(
           $('<img />', {src: 'img/bin.svg', class: 'icon icon-squared-cross'})
-        )
+        );
     $('.current-facets').append($('<li />', {text: encodeURIComponent($facets.val() + '_ntk_cs:"' +  $facetValues.val() + '"')}).prepend(a))
   });
 
@@ -418,7 +421,7 @@ var init = function() {
 
   getSeoUrlParams();
   console.log('Loaded');
-}
+};
 
 /*
  * spawns the external job in getMfNames.js
@@ -431,7 +434,7 @@ var getMfNames = function(cb) {
 
   op.stdout.on('data', function(data) {
     console.log(data);
-  })
+  });
 
   op.on('exit', function(code) {
     if(code > 0) {
@@ -445,7 +448,7 @@ var getMfNames = function(cb) {
       cb();
     }
   });
-}
+};
 
 /*
  * spawns the external job in getFacets.js
@@ -473,7 +476,7 @@ var getFacets = function(cb) {
       cb();
     }
   });
-}
+};
 
 /*
  * spawns the external job in getCategories.js
@@ -500,7 +503,7 @@ var getCategories = function(cb) {
       cb();
     }
   });
-}
+};
 
 /*
  * spawns the external job in getSeoUrlParams.js
@@ -526,7 +529,7 @@ var getSeoUrlParams = function(cb) {
       ap = new Awesomplete(el.get(0), {list: savedEntries});
     }
   });
-}
+};
 
 /*
  * spawns the external job in findOne.js
@@ -560,7 +563,7 @@ var findOne = function(data) {
         $('.insert').removeClass('hidden');
       }
     } else {
-      var params = found.QUERYPARAMS.split('&facet=')[0]
+      var params = found.QUERYPARAMS.split('&facet=')[0];
 
       paramObj = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
 
@@ -568,7 +571,7 @@ var findOne = function(data) {
         var el = $('[name="' + k + '"]');
         el.val(v);
         el.find('[value="' + v + '"]').prop('selected', true).trigger('click');
-      })
+      });
 
       var facetArr = found.QUERYPARAMS.split('&facet=');
 
@@ -581,15 +584,15 @@ var findOne = function(data) {
             })
             .append(
               $('<img />', {src: 'img/bin.svg', class: 'icon icon-squared-cross'})
-            )
-        $('.current-facets').append($('<li />', {text: facetArr[i]}).prepend(a))
+            );
+        $('.current-facets').append($('<li />', {text: facetArr[i]}).prepend(a));
       });
       $('.earl').text(urlSnippet + found.SEOURLPARAM).attr('href', urlSnippet + found.SEOURLPARAM);
       $('.wwwearl').text(urlSnippet.replace('stage2', 'www') + found.SEOURLPARAM).attr('href', urlSnippet.replace('stage2', 'www') + found.SEOURLPARAM);
     }
     spinner.spin(false);
   });
-}
+};
 
 /*
  * spawns the external job in insertOne.js
@@ -610,7 +613,7 @@ var insertOne = function(data, cb) {
     }
     spinner.spin(false);
   });
-}
+};
 
 /*
  * spawns the external job in updateOne.js
@@ -631,7 +634,7 @@ var updateOne = function(data, cb) {
     }
     spinner.spin(false);
   });
-}
+};
 
 /*
  * spawns the external job in deleteOne.js
@@ -652,7 +655,7 @@ var deleteOne = function(data, cb) {
     }
     spinner.spin(false);
   });
-}
+};
 
 
 // Kick off the show

@@ -9,16 +9,16 @@ var ibmdb = require('ibm_db'),
     async = require('async'),
     file = require('./file'),
     fs = require('fs');
-    
+
 function getData(cb) {
   console.log('Querying for Categories');
   var db = c.stage;
   ibmdb.open("DRIVER={DB2};DATABASE="+db.name+";HOSTNAME="+db.host+";UID="+db.user+";PWD="+db.pass+";PORT="+db.port+";PROTOCOL=TCPIP", function (err,conn) {
     if (err) cb(err);
-    var q = "select a.mfpartnumber as \"ProdID\", trim(e.identifier) as \"CatID\", trim(d.name) as \"CatName\", e.catgroup_id as \"CatGroup\" from catentry as a inner join catgpenrel as c on a.catentry_id = c.catentry_id inner join catgrpdesc as d on c.catgroup_id = d.catgroup_id inner join catgroup as e on d.catgroup_id = e.catgroup_id where a.catenttype_id = 'ProductBean' and e.identifier not like '%ZZ_%' and c.catalog_id = '10051' order by a.mfpartnumber asc with ur";
+    var q = "select a.mfpartnumber as \"ProdID\", trim(e.identifier) as \"CatID\", trim(d.name) as \"CatName\", e.catgroup_id as \"CatGroup\" from catentry as a inner join catgpenrel as c on a.catentry_id = c.catentry_id inner join catgrpdesc as d on c.catgroup_id = d.catgroup_id inner join catgroup as e on d.catgroup_id = e.catgroup_id where a.catenttype_id = 'ProductBean' and e.identifier not like '%ZZ_%' and c.catalog_id = '"+c.catalogId+"' order by a.mfpartnumber asc with ur";
     conn.query(q, [], function (err, data) {
       if (err) cb(err);
-      
+
       var map = {};
       _.each(data, function(a, i) {
         map[a.CatID] = {
@@ -27,18 +27,18 @@ function getData(cb) {
           name: a.CatName
         }
       })
-      
+
       var uniq = data.map(function(item) {
         return item.CatID;
       }).unique().sort();
-      
+
       //uniq.pop();
-      
+
       var fin = [];
       _.each(uniq, function(a) {
         fin.push(map[a]);
       })
-      
+
       file.save(path.join(LOCALAPPDATA, './SearchCategories.js'), 'exports.Cats = ' + JSON.stringify(fin), function(err) {
         if(err) cb(err);
         conn.close(function () {

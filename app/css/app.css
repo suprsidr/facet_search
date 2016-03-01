@@ -138,12 +138,18 @@ select, option {
   width: 80%;
   height: 80%;
   background: #fff;
-  overflow-x: hidden;
-  overflow-y: auto;
   padding: 1rem;
+  padding-right: 40px;
 }
 .seo-list .seo-closer {
-  float: right;
+  position: absolute;
+  top: 6px;
+  right: 10px;
+}
+.seo-list > div {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 100%;
 }
 .seo-list ul {
   color: #222;

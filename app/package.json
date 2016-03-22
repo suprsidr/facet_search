@@ -1,6 +1,6 @@
 {
   "name": "ForceRC_Faceted_Search",
-  "productName": "HH.com Faceted Search Builder",
+  "productName": "ForceRC Faceted Search Builder",
   "main": "./index.html",
   "description": "Build and save faceted search params to DB",
   "repository": "https://github.com/suprsidr/facet_search.git",

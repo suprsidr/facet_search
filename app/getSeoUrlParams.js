@@ -14,8 +14,6 @@ function getData(cb) {
       if (err) cb(err);
       conn.close(function () {
         cb(null, data.map(function(a) {return a.SEOURLPARAM}));
-        // test data
-        //cb(null, ['wayne','barb','barbara','cats','catness','dogs','doggy']);
       });
     });
   });

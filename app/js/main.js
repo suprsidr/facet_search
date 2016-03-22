@@ -11,7 +11,7 @@ var gui = require('nw.gui'),
     _ = require('lodash'),
     async = require('async'),
     savedEntries = [],
-    urlSnippet = 'http://dev2.forcerc.com/webapp/wcs/stores/servlet/MarketingSearchUrl?catalogId='+c.catalogId+'&orderId=.&langId=-1&storeId='+c.storeId+'&seoUrlParam=',
+    urlSnippet = 'http://stage2.forcerc.com/webapp/wcs/stores/servlet/MarketingSearchUrl?catalogId='+c.catalogId+'&orderId=.&langId=-1&storeId='+c.storeId+'&seoUrlParam=',
     version = require('./package.json').version,
     spinOpts = {
       lines: 13,

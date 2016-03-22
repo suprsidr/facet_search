@@ -70,20 +70,23 @@ select, option {
   fill: currentColor; }
 
 .icon-squared-cross {
-  color: #f9be03;
+  color: #fff;
   width: 24px;
   height: 24px;
   margin-top: 7px; }
   .icon-squared-cross:hover {
-    color: #363636;
+    color: #0e425a;
     fill: currentColor; }
-
+.seo-list .icon-squared-cross {
+  color: #d92031; }
+.seo-list .icon-squared-cross:hover {
+  color: #0e425a; }
 .icon-checkbox-checked {
   width: 16px;
   height: 16px; }
 
 .nav-bar {
-    background-color: #000;
+    background-color: #d92031;
     border-radius: 10px 10px 0 0;
     font-size: 24px;
     left: 0;
@@ -95,7 +98,7 @@ select, option {
     color: #fff;
 }
 .nav-bar h3 {
-  color: #f9be03;
+  color: #fff;
 }
 .nav-bar ul {
   margin: 0;
